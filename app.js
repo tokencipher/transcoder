@@ -17,6 +17,9 @@ const copyFile = require('./gcloud-bucket-storage/file-copier');
 // The ID Of your GCS bucket
 const bucketName = process.env.BUCKET_NAME;
 
+// The ID of your GCC destination bucket for copy operations
+const destBucketName = process.env.DEST_BUCKET_NAME;
+
 // The path to your file upload
 const filePath = '../video/newyears.mov';
 
@@ -87,13 +90,11 @@ async function getJob(jobId) {
       // Download or move file once job status is SUCCEEDED
       console.log(`Job state: ${response.state}`);
       let srcFileName = 'output/hd.mp4';
-      let newDestFileName = `modified-output/${destFileName.split('.')[0]}`;
-      // Only capable of moving file within bucket. Initiate copy operation
-      moveFile(bucketName, srcFileName, newDestFileName).catch(console.error);
-      // Initiate copy operation 
-
-      // Perform clean-up tasks (i.e, delete original file and contents of output/)
-      // save reference to url of transcoded and renamed object
+      let newDestFileName = `${destFileName.split('.')[0]}`;
+       // TODO: Initiate copy operation
+       copyFile(bucketName, srcFileName, destBucketName, newDestFileName).catch(console.error);
+      // Save reference of public transcoded media URL 
+      const transcodedMediaUrl = `https://storage.googleapis.com/${destBucketName}/${newDestFileName}`; 
       break;
     case 'FAILED':
       console.error(`Job state: ${response.state}`);
