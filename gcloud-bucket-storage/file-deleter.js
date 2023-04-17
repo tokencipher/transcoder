@@ -30,7 +30,7 @@ const deleteOptions = {
 };
 
 async function deleteFile(bucketName, fileName) {
-  await storage.bucket(bucketName).file(fileName).delete(deleteOptions);
+  await storage.bucket(bucketName).file(fileName).delete();
 
   console.log(`gs://${bucketName}/${fileName} deleted`);
 }
