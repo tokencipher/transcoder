@@ -14,6 +14,9 @@ const moveFile = require('./gcloud-bucket-storage/file-mover');
 // Import GCS Bucket object copier module
 const copyFile = require('./gcloud-bucket-storage/file-copier');
 
+// Import GCS Bucket object deleter module
+const deleteFile = require('./gcloud-bucket-storage/file-deleter');
+
 // The ID Of your GCS bucket
 const bucketName = process.env.BUCKET_NAME;
 
@@ -93,6 +96,9 @@ async function getJob(jobId) {
       let newDestFileName = `${destFileName.split('.')[0]}`;
        // TODO: Initiate copy operation
        copyFile(bucketName, srcFileName, destBucketName, newDestFileName).catch(console.error);
+       // TODO: Do clean-up of bucket storage
+       deleteFile(bucketName, destFileName).catch(console.error);
+       // TODO: Delete files by prefix
       // Save reference of public transcoded media URL 
       const transcodedMediaUrl = `https://storage.googleapis.com/${destBucketName}/${newDestFileName}`; 
       break;
